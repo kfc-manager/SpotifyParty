@@ -5,8 +5,6 @@ import com.kalle.spotifyparty.SpotifyAPI;
 import com.kalle.spotifyparty.transcripts.ApiResponse;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class QueueService {
 

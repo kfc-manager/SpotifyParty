@@ -111,7 +111,6 @@ public class SpotifyAPI {
     }
 
     public static ApiResponse getQueue() throws ApiException {
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.spotify.com/v1/me/player/queue"))
                 .header("Authorization", "Bearer " + TOKEN)
                 .build();
@@ -137,7 +136,6 @@ public class SpotifyAPI {
                 .queryParam("q", query)
                 .queryParam("type", "track")
                 .build().encode();
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder(URI.create(uri.toString()))
                 .header("Authorization", "Bearer " + TOKEN)
                 .build();
