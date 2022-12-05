@@ -1,4 +1,4 @@
-package com.kalle.spotifyparty.spotifyapi.transcripts;
+package com.kalle.spotifyparty.transcripts;
 
 import java.util.List;
 

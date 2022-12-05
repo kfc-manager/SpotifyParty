@@ -1,8 +1,8 @@
-package com.kalle.spotifyparty.spotifyapi.transcripts;
+package com.kalle.spotifyparty.transcripts;
 
 import java.util.List;
 
-public class ItemList {
+public class TrackList {
 
     private List<Track> items;
 

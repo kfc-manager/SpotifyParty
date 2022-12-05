@@ -1,7 +1,8 @@
 package com.kalle.spotifyparty.queue;
 
-import com.kalle.spotifyparty.spotifyapi.SpotifyAPI;
-import com.kalle.spotifyparty.spotifyapi.transcripts.Queue;
+import com.kalle.spotifyparty.ApiException;
+import com.kalle.spotifyparty.SpotifyAPI;
+import com.kalle.spotifyparty.transcripts.ApiResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,11 +10,11 @@ import java.util.List;
 @Component
 public class QueueService {
 
-    public List<Queue> getQueue() {
-        return List.of(SpotifyAPI.getQueue());
+    public ApiResponse getQueue() throws ApiException {
+        return SpotifyAPI.getQueue();
     }
 
-    public void addToQueue(String songID) {
+    public void addToQueue(String songID) throws ApiException {
         SpotifyAPI.addTrack(songID);
     }
 
