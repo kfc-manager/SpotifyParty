@@ -1,5 +1,9 @@
-package com.kalle.spotifyparty.queue.transcripts;
+package com.kalle.spotifyparty.routes;
 
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiArtist;
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Track {
@@ -9,6 +13,25 @@ public class Track {
     private String name;
     private int duration;
     private String image;
+
+    public static List<Track> transformTracks(List<ApiTrack> apiTracks) {
+        List<Track> tracks = new ArrayList<>();
+        for (ApiTrack apiTrack : apiTracks) {
+            List<String> artists = new ArrayList<>();
+            for (ApiArtist apiArtist : apiTrack.getArtists()) {
+                artists.add(apiArtist.getName());
+            }
+            Track track = new Track(
+                    apiTrack.getId(),
+                    artists,
+                    apiTrack.getName(),
+                    apiTrack.getDuration_ms(),
+                    apiTrack.getAlbum().getImages().get(0).getUrl()
+            );
+            tracks.add(track);
+        }
+        return tracks;
+    }
 
     public Track(String id, List<String> artists, String name, int duration, String image) {
         this.id = id;

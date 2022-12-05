@@ -1,5 +1,6 @@
-package com.kalle.spotifyparty.search;
+package com.kalle.spotifyparty.routes.search;
 
+import com.kalle.spotifyparty.routes.Track;
 import com.kalle.spotifyparty.spotifyapi.ApiException;
 import com.kalle.spotifyparty.spotifyapi.SpotifyAPI;
 import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
@@ -10,8 +11,9 @@ import java.util.List;
 @Component
 public class SearchService {
 
-    public List<ApiTrack> getSearch(String query) throws ApiException {
-        return SpotifyAPI.searchTrack(query);
+    public List<Track> getSearch(String query) throws ApiException {
+        List<ApiTrack> apiTracks = SpotifyAPI.searchTrack(query);
+        return Track.transformTracks(apiTracks);
     }
 
 }

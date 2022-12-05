@@ -1,6 +1,6 @@
-package com.kalle.spotifyparty.queue;
+package com.kalle.spotifyparty.routes.queue;
 
-import com.kalle.spotifyparty.queue.transcripts.Track;
+import com.kalle.spotifyparty.routes.Track;
 import com.kalle.spotifyparty.spotifyapi.ApiException;
 import com.kalle.spotifyparty.spotifyapi.SpotifyAPI;
 import com.kalle.spotifyparty.spotifyapi.transcripts.ApiArtist;
@@ -20,22 +20,7 @@ public class QueueService {
         List<ApiTrack> apiTracks = Stream.concat(
                 List.of(apiResponse.getCurrently_playing()).stream(),
                 apiResponse.getQueue().stream()).toList();
-        List<Track> tracks = new ArrayList<>();
-        for (ApiTrack apiTrack : apiTracks) {
-            List<String> artists = new ArrayList<>();
-            for (ApiArtist apiArtist : apiTrack.getArtists()) {
-                artists.add(apiArtist.getName());
-            }
-            Track track = new Track(
-                    apiTrack.getId(),
-                    artists,
-                    apiTrack.getName(),
-                    apiTrack.getDuration_ms(),
-                    apiTrack.getAlbum().getImages().get(0).getUrl()
-            );
-            tracks.add(track);
-        }
-        return tracks;
+        return Track.transformTracks(apiTracks);
     }
 
     public void addToQueue(String songID) throws ApiException {

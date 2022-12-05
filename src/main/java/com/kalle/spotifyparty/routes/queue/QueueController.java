@@ -1,26 +1,33 @@
-package com.kalle.spotifyparty.search;
+package com.kalle.spotifyparty.routes.queue;
 
+import com.kalle.spotifyparty.routes.Track;
 import com.kalle.spotifyparty.spotifyapi.ApiException;
 import com.kalle.spotifyparty.spotifyapi.transcripts.ApiError;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/search")
-public class SearchController {
+@RequestMapping(path = "/queue")
+public class QueueController {
 
-    private SearchService service;
+    private QueueService service;
 
-    public SearchController(SearchService service) {
+    @Autowired
+    public QueueController(QueueService service) {
         this.service = service;
     }
 
-    @GetMapping
-    public List<ApiTrack> getSearch(@RequestParam Map<String,String> params) throws ApiException {
-        return service.getSearch(params.get("q"));
+    @GetMapping("/get")
+    public List<Track> getQueue() throws ApiException {
+        return service.getQueue();
+    }
+
+    @GetMapping("/add")
+    public void addToQueue(@RequestParam Map<String,String> params) throws ApiException {
+        service.addToQueue(params.get("track"));
     }
 
     @ExceptionHandler(ApiException.class)
