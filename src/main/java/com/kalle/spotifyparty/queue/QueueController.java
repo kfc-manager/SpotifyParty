@@ -1,11 +1,12 @@
 package com.kalle.spotifyparty.queue;
 
-import com.kalle.spotifyparty.ApiException;
-import com.kalle.spotifyparty.transcripts.ApiResponse;
-import com.kalle.spotifyparty.transcripts.MyError;
+import com.kalle.spotifyparty.queue.transcripts.Track;
+import com.kalle.spotifyparty.spotifyapi.ApiException;
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,7 +21,7 @@ public class QueueController {
     }
 
     @GetMapping("/get")
-    public ApiResponse getQueue() throws ApiException {
+    public List<Track> getQueue() throws ApiException {
         return service.getQueue();
     }
 
@@ -30,8 +31,8 @@ public class QueueController {
     }
 
     @ExceptionHandler(ApiException.class)
-    public MyError handleException(ApiException e) { //TODO optimize error status
-        MyError error = new MyError();
+    public ApiError handleException(ApiException e) { //TODO optimize error status
+        ApiError error = new ApiError();
         error.setMessage(e.getMessage());
         if (e.getStatus() == 0) {
             error.setStatus(500);

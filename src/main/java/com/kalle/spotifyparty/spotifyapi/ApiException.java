@@ -1,4 +1,4 @@
-package com.kalle.spotifyparty;
+package com.kalle.spotifyparty.spotifyapi;
 
 public class ApiException extends Exception {
 

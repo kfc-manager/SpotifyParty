@@ -1,8 +1,8 @@
 package com.kalle.spotifyparty.search;
 
-import com.kalle.spotifyparty.ApiException;
-import com.kalle.spotifyparty.transcripts.MyError;
-import com.kalle.spotifyparty.transcripts.Track;
+import com.kalle.spotifyparty.spotifyapi.ApiException;
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiError;
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +19,13 @@ public class SearchController {
     }
 
     @GetMapping
-    public List<Track> getSearch(@RequestParam Map<String,String> params) throws ApiException {
+    public List<ApiTrack> getSearch(@RequestParam Map<String,String> params) throws ApiException {
         return service.getSearch(params.get("q"));
     }
 
     @ExceptionHandler(ApiException.class)
-    public MyError handleException(ApiException e) { //TODO optimize error status
-        MyError error = new MyError();
+    public ApiError handleException(ApiException e) { //TODO optimize error status
+        ApiError error = new ApiError();
         error.setMessage(e.getMessage());
         if (e.getStatus() == 0) {
             error.setStatus(500);

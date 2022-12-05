@@ -1,28 +1,28 @@
-package com.kalle.spotifyparty.transcripts;
+package com.kalle.spotifyparty.spotifyapi.transcripts;
 
 import java.util.List;
 
-public class Track {
+public class ApiTrack {
 
-    private List<Artist> artists;
+    private List<ApiArtist> artists;
     private String id;
-    private Album album;
+    private ApiAlbum album;
     private String name;
     private int duration_ms;
 
-    public Album getAlbum() {
+    public ApiAlbum getAlbum() {
         return album;
     }
 
-    public void setAlbum(Album album) {
+    public void setAlbum(ApiAlbum album) {
         this.album = album;
     }
 
-    public List<Artist> getArtists() {
+    public List<ApiArtist> getArtists() {
         return artists;
     }
 
-    public void setArtists(List<Artist> artists) {
+    public void setArtists(List<ApiArtist> artists) {
         this.artists = artists;
     }
 

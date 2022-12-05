@@ -1,6 +1,6 @@
-package com.kalle.spotifyparty.transcripts;
+package com.kalle.spotifyparty.spotifyapi.transcripts;
 
-public class MyError {
+public class ApiError {
 
     private int status;
     private String message;

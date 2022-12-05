@@ -1,6 +1,6 @@
-package com.kalle.spotifyparty.transcripts;
+package com.kalle.spotifyparty.spotifyapi.transcripts;
 
-public class Artist {
+public class ApiArtist {
 
     private String name;
 

@@ -1,9 +1,10 @@
-package com.kalle.spotifyparty;
+package com.kalle.spotifyparty.spotifyapi;
 
 import com.google.gson.Gson;
-import com.kalle.spotifyparty.transcripts.ApiResponse;
-import com.kalle.spotifyparty.transcripts.MyError;
-import com.kalle.spotifyparty.transcripts.Track;
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiResponse;
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiError;
+import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.Random;
 
 @RestController
-public class SpotifyAPI {
+public class SpotifyAPI { //TODO automatically refresh TOKEN
 
     private static final String CLIENT_ID = "";
     private static final String CLIENT_SECRET = "";
@@ -59,7 +60,7 @@ public class SpotifyAPI {
             Gson gson = new Gson();
             ApiResponse apiResponse = gson.fromJson(httpResponse.body(), ApiResponse.class);
             if (apiResponse.getError() != null) {
-                MyError error = apiResponse.getError();
+                ApiError error = apiResponse.getError();
                 throw new ApiException(error.getStatus(), error.getMessage());
             }
             return apiResponse;
@@ -86,7 +87,7 @@ public class SpotifyAPI {
 
     @GetMapping(path = "/callback")
     public void callback(@RequestParam() Map<String, String> params) throws ApiException {
-        if (!state.equals(params.get("state"))) return; //TODO throw an error
+        if (!state.equals(params.get("state"))) throw new ApiException("State does not match.");
         HttpRequest request = HttpRequest.newBuilder(URI.create("https://accounts.spotify.com/api/token"))
                 .POST(HttpRequest.BodyPublishers.ofString("code=" + params.get("code")
                         + "&redirect_uri=" + redirectURI
@@ -97,6 +98,18 @@ public class SpotifyAPI {
         ApiResponse apiResponse = sendRequest(request);
         TOKEN = apiResponse.getAccess_token();
         refresh_token = apiResponse.getRefresh_token();
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ApiError handleException(ApiException e) { //TODO optimize error status
+        ApiError error = new ApiError();
+        error.setMessage(e.getMessage());
+        if (e.getStatus() == 0) {
+            error.setStatus(500);
+        } else {
+            error.setStatus(e.getStatus());
+        }
+        return error;
     }
 
     public static void updateToken() throws ApiException { //TODO find better method to refresh token (no new refresh token gets send)
@@ -130,7 +143,7 @@ public class SpotifyAPI {
         sendRequest(request);
     }
 
-    public static List<Track> searchTrack(String query) throws ApiException {
+    public static List<ApiTrack> searchTrack(String query) throws ApiException {
         UriComponents uri = UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.spotify.com").path("/v1/search")
                 .queryParam("q", query)

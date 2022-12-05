@@ -1,10 +1,10 @@
-package com.kalle.spotifyparty.transcripts;
+package com.kalle.spotifyparty.spotifyapi.transcripts;
 
 import java.util.List;
 
 public class ApiResponse {
 
-    private MyError error;
+    private ApiError error;
 
     private String access_token;
     private String token_type;
@@ -12,16 +12,16 @@ public class ApiResponse {
     private int expires_in;
     private String refresh_token;
 
-    private Track currently_playing;
-    private List<Track> queue;
+    private ApiTrack currently_playing;
+    private List<ApiTrack> queue;
 
-    private TrackList tracks;
+    private ApiTrackList tracks;
 
-    public MyError getError() {
+    public ApiError getError() {
         return error;
     }
 
-    public void setError(MyError error) {
+    public void setError(ApiError error) {
         this.error = error;
     }
 
@@ -65,27 +65,27 @@ public class ApiResponse {
         this.refresh_token = refresh_token;
     }
 
-    public Track getCurrently_playing() {
+    public ApiTrack getCurrently_playing() {
         return currently_playing;
     }
 
-    public void setCurrently_playing(Track currently_playing) {
+    public void setCurrently_playing(ApiTrack currently_playing) {
         this.currently_playing = currently_playing;
     }
 
-    public List<Track> getQueue() {
+    public List<ApiTrack> getQueue() {
         return queue;
     }
 
-    public void setQueue(List<Track> queue) {
+    public void setQueue(List<ApiTrack> queue) {
         this.queue = queue;
     }
 
-    public TrackList getTracks() {
+    public ApiTrackList getTracks() {
         return tracks;
     }
 
-    public void setTracks(TrackList tracks) {
+    public void setTracks(ApiTrackList tracks) {
         this.tracks = tracks;
     }
 }

@@ -1,6 +1,6 @@
-package com.kalle.spotifyparty.transcripts;
+package com.kalle.spotifyparty.spotifyapi.transcripts;
 
-public class Image {
+public class ApiImage {
 
     private String url;
 
