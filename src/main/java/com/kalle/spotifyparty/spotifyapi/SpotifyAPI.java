@@ -87,7 +87,7 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
 
     @GetMapping(path = "/callback")
     public void callback(@RequestParam() Map<String, String> params) throws ApiException {
-        if (!state.equals(params.get("state"))) throw new ApiException("State does not match.");
+        if (!state.equals(params.get("state"))) throw new ApiException(502, "State does not match.");
         HttpRequest request = HttpRequest.newBuilder(URI.create("https://accounts.spotify.com/api/token"))
                 .POST(HttpRequest.BodyPublishers.ofString("code=" + params.get("code")
                         + "&redirect_uri=" + redirectURI
@@ -105,7 +105,7 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
         ApiError error = new ApiError();
         error.setMessage(e.getMessage());
         if (e.getStatus() == 0) {
-            error.setStatus(500);
+            error.setStatus(502);
         } else {
             error.setStatus(e.getStatus());
         }
@@ -128,6 +128,9 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
                 .header("Authorization", "Bearer " + TOKEN)
                 .build();
         ApiResponse apiResponse = sendRequest(request);
+        if (apiResponse.getCurrently_playing() == null) {
+            throw new ApiException(503, "Player is currently not active.");
+        }
         return apiResponse;
     }
 
@@ -137,7 +140,7 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
                 .queryParam("uri", "spotify:track:" + songID)
                 .build().encode();
         HttpRequest request = HttpRequest.newBuilder(URI.create(uri.toString()))
-                .POST(HttpRequest.BodyPublishers.ofString("")) //TODO POST request without body
+                .POST(HttpRequest.BodyPublishers.ofString("")) //TODO POST request without body?
                 .header("Authorization", "Bearer " + TOKEN)
                 .build();
         sendRequest(request);
