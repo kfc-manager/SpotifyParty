@@ -1,9 +1,10 @@
 package com.kalle.spotifyparty.spotifyapi;
 
 import com.google.gson.Gson;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiResponse;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiError;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
+import com.kalle.spotifyparty.transcripts.ApiResponse;
+import com.kalle.spotifyparty.transcripts.ApiError;
+import com.kalle.spotifyparty.transcripts.ApiTrack;
+import com.kalle.spotifyparty.transcripts.ErrorBody;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -101,15 +102,8 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
     }
 
     @ExceptionHandler(ApiException.class)
-    public ApiError handleException(ApiException e) { //TODO optimize error status
-        ApiError error = new ApiError();
-        error.setMessage(e.getMessage());
-        if (e.getStatus() == 0) {
-            error.setStatus(502);
-        } else {
-            error.setStatus(e.getStatus());
-        }
-        return error;
+    public ErrorBody handleException(ApiException e) { //TODO optimize error status
+        return e.getErrorBody();
     }
 
     public static void updateToken() throws ApiException { //TODO find better method to refresh token (no new refresh token gets send)

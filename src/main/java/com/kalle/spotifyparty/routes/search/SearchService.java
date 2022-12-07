@@ -1,9 +1,9 @@
 package com.kalle.spotifyparty.routes.search;
 
-import com.kalle.spotifyparty.routes.Track;
+import com.kalle.spotifyparty.transcripts.Track;
 import com.kalle.spotifyparty.spotifyapi.ApiException;
 import com.kalle.spotifyparty.spotifyapi.SpotifyAPI;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
+import com.kalle.spotifyparty.transcripts.ApiTrack;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

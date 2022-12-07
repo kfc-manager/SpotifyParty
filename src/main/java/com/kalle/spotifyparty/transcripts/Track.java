@@ -1,7 +1,4 @@
-package com.kalle.spotifyparty.routes;
-
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiArtist;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
+package com.kalle.spotifyparty.transcripts;
 
 import java.util.ArrayList;
 import java.util.List;

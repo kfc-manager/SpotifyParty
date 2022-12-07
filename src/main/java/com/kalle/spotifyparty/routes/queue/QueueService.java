@@ -1,14 +1,12 @@
 package com.kalle.spotifyparty.routes.queue;
 
-import com.kalle.spotifyparty.routes.Track;
+import com.kalle.spotifyparty.transcripts.Track;
 import com.kalle.spotifyparty.spotifyapi.ApiException;
 import com.kalle.spotifyparty.spotifyapi.SpotifyAPI;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiArtist;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiResponse;
-import com.kalle.spotifyparty.spotifyapi.transcripts.ApiTrack;
+import com.kalle.spotifyparty.transcripts.ApiResponse;
+import com.kalle.spotifyparty.transcripts.ApiTrack;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
