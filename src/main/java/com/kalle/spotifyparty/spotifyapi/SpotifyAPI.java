@@ -1,6 +1,7 @@
 package com.kalle.spotifyparty.spotifyapi;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.kalle.spotifyparty.transcripts.ApiResponse;
 import com.kalle.spotifyparty.transcripts.ApiError;
 import com.kalle.spotifyparty.transcripts.ApiTrack;
@@ -65,8 +66,10 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
                 throw new ApiException(error.getStatus(), error.getMessage());
             }
             return apiResponse;
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | JsonSyntaxException e) {
             throw new ApiException(e.getMessage());
+        } catch (NullPointerException e) {
+            return null; //apiResponse null for addTrack(), since no response body is received TODO find better solution
         }
     }
 
