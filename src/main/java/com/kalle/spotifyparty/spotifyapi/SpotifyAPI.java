@@ -2,10 +2,7 @@ package com.kalle.spotifyparty.spotifyapi;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.kalle.spotifyparty.transcripts.ApiResponse;
-import com.kalle.spotifyparty.transcripts.ApiError;
-import com.kalle.spotifyparty.transcripts.ApiTrack;
-import com.kalle.spotifyparty.transcripts.ErrorBody;
+import com.kalle.spotifyparty.transcripts.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,10 +17,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Stream;
 
 @RestController
 public class SpotifyAPI { //TODO automatically refresh TOKEN
@@ -53,6 +48,25 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
         String originalInput = CLIENT_ID + ":" + CLIENT_SECRET;
         String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
         return encodedString;
+    }
+
+    private static List<Track> transformTracks(List<ApiTrack> apiTracks) { //function to transform the transcripts (to cut out unrelevant information)
+        List<Track> tracks = new ArrayList<>();
+        for (ApiTrack apiTrack : apiTracks) {
+            List<String> artists = new ArrayList<>();
+            for (ApiArtist apiArtist : apiTrack.getArtists()) {
+                artists.add(apiArtist.getName());
+            }
+            Track track = new Track(
+                    apiTrack.getId(),
+                    artists,
+                    apiTrack.getName(),
+                    apiTrack.getDuration_ms(),
+                    apiTrack.getAlbum().getImages().get(0).getUrl()
+            );
+            tracks.add(track);
+        }
+        return tracks;
     }
 
     private static ApiResponse sendRequest(HttpRequest request) throws ApiException {
@@ -120,7 +134,7 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
         TOKEN = apiResponse.getAccess_token();
     }
 
-    public static ApiResponse getQueue() throws ApiException {
+    public static List<Track> getQueue() throws ApiException {
         HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.spotify.com/v1/me/player/queue"))
                 .header("Authorization", "Bearer " + TOKEN)
                 .build();
@@ -128,7 +142,11 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
         if (apiResponse.getCurrently_playing() == null) {
             throw new ApiException(503, "Player is currently not active.");
         }
-        return apiResponse;
+        List<ApiTrack> apiTracks = Stream.concat(
+                List.of(apiResponse.getCurrently_playing()).stream(),
+                apiResponse.getQueue().stream()).toList();
+        List<Track> tracks = transformTracks(apiTracks); //transform retrieved tracks to our format
+        return tracks;
     }
 
     public static void addTrack(String songID) throws ApiException {
@@ -143,7 +161,7 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
         sendRequest(request);
     }
 
-    public static List<ApiTrack> searchTrack(String query) throws ApiException {
+    public static List<Track> searchTrack(String query) throws ApiException {
         UriComponents uri = UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.spotify.com").path("/v1/search")
                 .queryParam("q", query)
@@ -153,7 +171,8 @@ public class SpotifyAPI { //TODO automatically refresh TOKEN
                 .header("Authorization", "Bearer " + TOKEN)
                 .build();
         ApiResponse apiResponse = sendRequest(request);
-        return apiResponse.getTracks().getItems();
+        List<Track> tracks = transformTracks(apiResponse.getTracks().getItems()); //transform retrieved tracks to our format
+        return tracks;
     }
 
 }

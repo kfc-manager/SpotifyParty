@@ -12,8 +12,8 @@ import java.util.List;
 public class SearchService {
 
     public List<Track> getSearch(String query) throws ApiException {
-        List<ApiTrack> apiTracks = SpotifyAPI.searchTrack(query);
-        return Track.transformTracks(apiTracks);
+        List<Track> tracks = SpotifyAPI.searchTrack(query);
+        return tracks;
     }
 
 }

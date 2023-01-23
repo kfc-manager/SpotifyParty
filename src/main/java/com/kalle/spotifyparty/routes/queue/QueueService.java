@@ -14,11 +14,8 @@ import java.util.stream.Stream;
 public class QueueService {
 
     public List<Track> getQueue() throws ApiException {
-        ApiResponse apiResponse = SpotifyAPI.getQueue();
-        List<ApiTrack> apiTracks = Stream.concat(
-                List.of(apiResponse.getCurrently_playing()).stream(),
-                apiResponse.getQueue().stream()).toList();
-        return Track.transformTracks(apiTracks);
+        List<Track> tracks = SpotifyAPI.getQueue();
+        return tracks;
     }
 
     public void addToQueue(String songID) throws ApiException {
